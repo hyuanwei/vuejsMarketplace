@@ -73,8 +73,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      vue : 'vue/dist/vue.js',
-      Src : CONTEXT_PATH,
+      Src: CONTEXT_PATH,
     },
   },
   devServer: {
@@ -98,10 +97,17 @@ module.exports = {
 
 if (PRODUCTION) {
   module.exports.devtool = 'source-map'
-  module.exports.plugins = module.exports.plugins.concat(new UglifyJsPlugin({
-    uglifyOptions: {
-      minimize : true,
-      compress : true,
-    },
-  }))
+  module.exports.plugins = module.exports.plugins.concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      },
+    }),
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        minimize : true,
+        compress : true,
+      },
+    }),
+  ])
 }
