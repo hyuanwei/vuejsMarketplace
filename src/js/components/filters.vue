@@ -2,9 +2,7 @@
   .filter-wrapper
     h3.filter-header {{ filterKey }}
     .filters
-      .filter(
-        v-for='filter in computedFilters'
-      )
+      .filter(v-for='filter in computedFilters')
         .v-input-checkbox
           input(
             v-model="$store.state.checkedFilters[filterKey]"
