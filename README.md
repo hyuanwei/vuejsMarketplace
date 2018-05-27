@@ -1,5 +1,5 @@
 # Frontend Dev Test 2 #
-1. Clone this repository
+1. Fork this repository
 1. Create a branch: `lastname-firstname`
 1. Run `npm run start`
 1. Read the instructions page thoroughly
