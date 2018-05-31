@@ -42,6 +42,9 @@
     ul
       li We're developers. We like building cool stuff and have fun doing it; so should you!
       li We want to know you can solve problems, not define what an IIFE is
+      li Work no more than a couple hours; we know your time is valuable
+      li Don't worry if you don't finish; we want to see how you think
+      li If you have any questions, feel free to reach out
       li Relax, and have some fun with this 🤓
     br
     p
