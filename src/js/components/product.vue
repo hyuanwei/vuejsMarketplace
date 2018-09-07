@@ -1,8 +1,9 @@
+
 <template lang="pug">
   a.product(v-if='productData' :href='productData.url')
     .product-image-wrapper
       img.hot-deal(v-show='productData.promotions.includes("Hot Deal")' :src='hotDealsImg')
-      img.product-image(:src='productData.placeholder')
+      img.product-image(:src='productData.image')
     p.product-name {{ productData.name }}
     .product-stars(v-if='productData.rating')
         .star(v-for='n in floorRating(productData.rating)')
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+
 export default {
   props: ['productData'],
 
