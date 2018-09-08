@@ -1,5 +1,5 @@
 <template lang='pug'>
-  div 
+  div
     .main-wrapper
       filters(
         v-for="filter in allFilters" 
@@ -8,8 +8,9 @@
       ) 
       .products-wrapper
         product(
-          v-for="product in allProducts" 
+          v-for="(product, index) in filtedProducts" 
           v-bind:key="product.sku" 
+          v-bind:index="index"
           v-bind:productData="product"
         )
     #preloadedImages
@@ -24,6 +25,46 @@ export default {
     allFilters: ["brand", "promotions"]
   }),
 
+  computed: {
+    checkedFilters() {
+      return this.$store.state.checkedFilters;
+    },
+    filtedProducts() {
+      let vm = this;
+
+      let filtedProducts = [];
+
+      let filterCount = 0;
+      for (var key in vm.checkedFilters) {
+        filterCount += vm.checkedFilters[key].length;
+      }
+
+      if (filterCount > 0) {
+        this.allProducts.filter(product => {
+          for (var key in vm.checkedFilters) {
+            if (vm.checkedFilters.hasOwnProperty(key)) {
+              if (Array.isArray(vm.checkedFilters[key])) {
+                vm.checkedFilters[key].forEach(function(value) {
+                  if (product[key].includes(value)) {
+                    filtedProducts.push(product);
+                  }
+                });
+              } else {
+                if (vm.checkedFilters[key].includes(product[key])) {
+                  filtedProducts.push(product);
+                }
+              }
+            }
+          }
+        });
+      } else {
+        filtedProducts = vm.allProducts;
+      }
+
+      return filtedProducts;
+    }
+  },
+
   methods: {
     getProducts: function() {
       let vm = this;
@@ -31,12 +72,15 @@ export default {
       this.$http.get(LINK).then(
         function(response) {
           vm.allProducts = response.data;
-          console.log(vm.allProducts);
+          //console.log(vm.allProducts);
+          vm.$store.commit("setProductData", vm.allProducts);
         },
         function(error) {
           console.log(error.statusText);
         }
       );
+
+      console.log(vm.$store.state);
     }
   },
 
@@ -49,16 +93,16 @@ export default {
 <style lang="scss" scoped>
 @import "../../scss/base";
 
-.main-wrapper {
-  display: flex;
-  margin: 0 auto;
-  padding: 1em;
-  max-width: 1280px;
-}
 
 .products-wrapper {
-  // @media (min-width: $tablet) {
-  //   margin: 0.25em 1.25em 1.25em 0.25em;
-  // }
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;  
+  margin: 0 auto;  
+}
+
+.product {
+  padding: 1em 0.5em;
+  flex: 1 1 200px;
 }
 </style>

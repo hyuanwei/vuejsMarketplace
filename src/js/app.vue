@@ -6,7 +6,7 @@
 
 <style lang="scss">
   @import "../scss/variables";
-
+  
   .main-wrapper {
     margin: 0 auto;
     padding: 1em;
