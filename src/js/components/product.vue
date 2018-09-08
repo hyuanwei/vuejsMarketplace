@@ -1,5 +1,6 @@
+
 <template lang="pug">
-  a.product(v-if='productData' :href='productData.url')
+  a.product(v-if='productData' :href='productData.url' :data-index='index')
     .product-image-wrapper
       img.hot-deal(v-show='productData.promotions.includes("Hot Deal")' :src='hotDealsImg')
       img.product-image(:src='productData.placeholder')
@@ -23,10 +24,11 @@
 
 <script>
 export default {
-  props: ['productData'],
+  props: ["productData", "index"],
 
   data: () => ({
-    hotDealsImg: 'https://www.roguefitness.com/skin/frontend/rg/2015/images/matte-black-friday/hot-deal-icon-2015.jpg',
+    hotDealsImg:
+      "https://www.roguefitness.com/skin/frontend/rg/2015/images/matte-black-friday/hot-deal-icon-2015.jpg"
   }),
 
   methods: {
@@ -36,7 +38,7 @@ export default {
      * @return {integer}
      */
     floorRating(rating) {
-      return Math.floor(rating)
+      return Math.floor(rating);
     },
 
     /**
@@ -45,7 +47,7 @@ export default {
      * @return {integer}
      */
     remainingRating(rating) {
-      return Math.abs(Math.floor(5 - rating))
+      return Math.abs(Math.floor(5 - rating));
     },
 
     /**
@@ -54,7 +56,7 @@ export default {
      * @return {integer}
      */
     remainingDecimal(rating) {
-      return parseFloat("." + (rating+"").split(".")[1]) || null
+      return parseFloat("." + (rating + "").split(".")[1]) || null;
     },
 
     /**
@@ -63,8 +65,12 @@ export default {
      * @return {string}
      */
     calculatePercentageStarWidth(rating) {
-      return `${rating*100}%`
+      return `${rating * 100}%`;
     },
+  },
+
+  mounted: function() {
+    this.$store.commit('replacePlaceholder', this.index);
   },
 
   filters: {
@@ -74,13 +80,13 @@ export default {
      * @return {string}
      */
     currency(n) {
-      return parseFloat(n).toLocaleString('en-US', {
-        style    : 'currency',
-        currency : 'USD',
-      })
-    },
-  },
-}
+      return parseFloat(n).toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+      });
+    }
+  }
+};
 </script>
 
 <style scoped lang="scss">
@@ -94,13 +100,16 @@ export default {
   transform-origin: 10% 50%;
   z-index: 1;
 
-  &, &:hover, &:active, &:visited {
+  &,
+  &:hover,
+  &:active,
+  &:visited {
     text-decoration: inherit;
     color: inherit;
   }
 
   p {
-    margin: 0 auto .25em;
+    margin: 0 auto 0.25em;
     max-width: 190px;
   }
 
@@ -110,12 +119,12 @@ export default {
 
   &-image-wrapper {
     position: relative;
-    margin-bottom: .25em;
+    margin-bottom: 0.25em;
 
     .hot-deal {
       position: absolute;
-      top: .25em;
-      left: .25em;
+      top: 0.25em;
+      left: 0.25em;
     }
 
     .product-image {
@@ -125,10 +134,10 @@ export default {
   }
 
   &-stars {
-    font-size: .9em;
+    font-size: 0.9em;
     display: inline-block;
     width: 80px;
-    margin: 0 auto .45em;
+    margin: 0 auto 0.45em;
     vertical-align: middle;
 
     .star {
@@ -157,7 +166,7 @@ export default {
   }
 
   &-price {
-    font-size: .9em;
+    font-size: 0.9em;
 
     .price {
       color: $green;
@@ -165,19 +174,23 @@ export default {
     }
 
     .starting-at {
-      font-size: .8em;
+      font-size: 0.8em;
     }
 
     .old-price {
-      font-size: .9em;
+      font-size: 0.9em;
       color: gray;
       text-decoration: line-through;
     }
   }
 
   //animations
-  &-move { transition: all 600ms ease-in-out 50ms }
-  &-enter-active { transition: all 300ms ease-out }
+  &-move {
+    transition: all 600ms ease-in-out 50ms;
+  }
+  &-enter-active {
+    transition: all 300ms ease-out;
+  }
 
   &-leave-active {
     transition: all 200ms ease-in;
@@ -186,8 +199,12 @@ export default {
   }
 
   &-enter,
-  &-leave-to { opacity: 0 }
-  &-enter { transform: scale(0.9) }
+  &-leave-to {
+    opacity: 0;
+  }
+  &-enter {
+    transform: scale(0.9);
+  }
   //animations
 }
 </style>

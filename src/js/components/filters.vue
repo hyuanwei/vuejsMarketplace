@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  props: ['filterKey'],
+  props: ["filterKey"],
 
   computed: {
     /**
@@ -25,49 +25,49 @@ export default {
      * @return {array}
      */
     computedFilters() {
-      let filters = []
+      let filters = [];
 
       this.$store.state.productsData.filter(product => {
-        if(typeof product[this.filterKey] === 'object') {
+        if (typeof product[this.filterKey] === "object") {
           product[this.filterKey].map(filter => {
-            if(!filters.includes(filter)) {
-              filters.push(filter)
+            if (!filters.includes(filter)) {
+              filters.push(filter);
             }
-          })
+          });
         } else {
-          if(!filters.includes(product[this.filterKey])) {
-            filters.push(product[this.filterKey])
+          if (!filters.includes(product[this.filterKey])) {
+            filters.push(product[this.filterKey]);
           }
         }
-      })
+      });
 
-      return filters
-    },
+      return filters;
+    }
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
-  @import "../../scss/base";
+@import "../../scss/base";
 
-  .filter-wrapper {
-    margin: .25em .25em 1em;
+.filter-wrapper {
+  margin: 0.25em 0.25em 1em;
 
-    @media(min-width: $tablet) {
-      margin: .25em 1.25em 1.25em .25em;
-    }
+  @media (min-width: $tablet) {
+    margin: 0.25em 1.25em 1.25em 0.25em;
+  }
 
-    .filter-header {
-      border-bottom: 1px solid $black;
-    }
+  .filter-header {
+    border-bottom: 1px solid $black;
+  }
 
-    .filters {
-      margin: 0;
-      width: 200px;
+  .filters {
+    margin: 0;
+    width: 200px;
 
-      .filter {
-        margin: 1em 0;
-      }
+    .filter {
+      margin: 1em 0;
     }
   }
+}
 </style>
