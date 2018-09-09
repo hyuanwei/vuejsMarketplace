@@ -1,25 +1,26 @@
 
 <template lang="pug">
-  a.product(v-if='productData' :href='productData.url' :data-index='index')
-    .product-image-wrapper
-      img.hot-deal(v-show='productData.promotions.includes("Hot Deal")' :src='hotDealsImg')
-      img.product-image(:src='productData.placeholder')
-    p.product-name {{ productData.name }}
-    .product-stars(v-if='productData.rating')
-        .star(v-for='n in floorRating(productData.rating)')
-          span.star-yellow ★
-        .star.star-percentage(v-show='remainingDecimal(productData.rating)')
-          span.star-gray ★
-          span.star-yellow.percent-star(:style='{ width: calculatePercentageStarWidth(remainingDecimal(productData.rating)) }') ★
-        .star(v-for='n in remainingRating(productData.rating)')
-          span.star-gray ★
-    p.product-price(v-if='!productData.specialPrice')
-      span.starting-at(v-show='productData.startingAt') Starting at:&nbsp;
-      span.price {{ productData.price | currency }}
-    p.product-price(v-else)
-      span.price {{ productData.specialPrice | currency }}
-      br
-      span.old-price {{ productData.price | currency }}
+  transition(name = "product")
+    a.product(v-if='productData' :href='productData.url' :data-index='index')
+      .product-image-wrapper
+        img.hot-deal(v-show='productData.promotions.includes("Hot Deal")' :src='hotDealsImg')
+        img.product-image(:src='productData.placeholder')
+      p.product-name {{ productData.name }}
+      .product-stars(v-if='productData.rating')
+          .star(v-for='n in floorRating(productData.rating)')
+            span.star-yellow ★
+          .star.star-percentage(v-show='remainingDecimal(productData.rating)')
+            span.star-gray ★
+            span.star-yellow.percent-star(:style='{ width: calculatePercentageStarWidth(remainingDecimal(productData.rating)) }') ★
+          .star(v-for='n in remainingRating(productData.rating)')
+            span.star-gray ★
+      p.product-price(v-if='!productData.specialPrice')
+        span.starting-at(v-show='productData.startingAt') Starting at:&nbsp;
+        span.price {{ productData.price | currency }}
+      p.product-price(v-else)
+        span.price {{ productData.specialPrice | currency }}
+        br
+        span.old-price {{ productData.price | currency }}
 </template>
 
 <script>
@@ -66,11 +67,11 @@ export default {
      */
     calculatePercentageStarWidth(rating) {
       return `${rating * 100}%`;
-    },
+    }
   },
 
   mounted: function() {
-    this.$store.commit('replacePlaceholder', this.index);
+    this.$store.commit("replacePlaceholder", this.index);
   },
 
   filters: {
@@ -202,9 +203,7 @@ export default {
   &-leave-to {
     opacity: 0;
   }
-  &-enter {
-    transform: scale(0.9);
-  }
+
   //animations
 }
 </style>

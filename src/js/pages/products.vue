@@ -7,8 +7,8 @@
           v-for="filter in allFilters" 
           v-bind:key="filter" 
           :filterKey = "filter"
-        ) 
-      .products-wrapper 
+        )
+      .products-wrapper
         product(
           v-for="(product, index) in filtedProducts" 
           v-bind:key="product.sku" 
@@ -18,7 +18,7 @@
         h1(
           v-if="filtedProducts.length == 0"
         ) NO RESULT
-    #preloadedImages
+      #preloadedImages
 </template>
 
 <script>
