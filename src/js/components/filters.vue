@@ -51,6 +51,7 @@ export default {
 @import "../../scss/base";
 
 .filter-wrapper {
+
   margin: 0.25em 0.25em 1em;
 
   @media (min-width: $tablet) {

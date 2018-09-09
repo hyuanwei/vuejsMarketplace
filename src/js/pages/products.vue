@@ -1,11 +1,12 @@
 <template lang='pug'>
   div
     .main-wrapper
-      filters(
-        v-for="filter in allFilters" 
-        v-bind:key="filter" 
-        :filterKey = "filter"
-      ) 
+      .filters-wrapper
+        filters(
+          v-for="filter in allFilters" 
+          v-bind:key="filter" 
+          :filterKey = "filter"
+        ) 
       .products-wrapper
         product(
           v-for="(product, index) in filtedProducts" 
@@ -13,6 +14,9 @@
           v-bind:index="index"
           v-bind:productData="product"
         )
+        h1(
+          v-if="filtedProducts.length == 0"
+        ) NO RESULT
     #preloadedImages
 </template>
 
@@ -22,6 +26,7 @@ const LINK = "products.json";
 export default {
   data: () => ({
     allProducts: [],
+    // currentProducts: [],
     allFilters: ["brand", "promotions"]
   }),
 
@@ -29,36 +34,48 @@ export default {
     checkedFilters() {
       return this.$store.state.checkedFilters;
     },
+
+    filterCount() {
+      let filterCount = 0;
+      for (var key in this.checkedFilters) {
+        filterCount += this.checkedFilters[key].length;
+      }
+      return filterCount;
+    },
+
     filtedProducts() {
       let vm = this;
 
-      let filtedProducts = [];
+      let filtedProducts = vm.allProducts;
 
-      let filterCount = 0;
-      for (var key in vm.checkedFilters) {
-        filterCount += vm.checkedFilters[key].length;
-      }
+      if (vm.filterCount > 0) {
+        filtedProducts = [];
 
-      if (filterCount > 0) {
-        this.allProducts.filter(product => {
+        this.allProducts.forEach(product => {
           for (var key in vm.checkedFilters) {
             if (vm.checkedFilters.hasOwnProperty(key)) {
               if (Array.isArray(vm.checkedFilters[key])) {
                 vm.checkedFilters[key].forEach(function(value) {
                   if (product[key].includes(value)) {
-                    filtedProducts.push(product);
+                    if (filtedProducts.indexOf(product) < 0) {
+                      filtedProducts.push(product);
+                    }
                   }
                 });
               } else {
                 if (vm.checkedFilters[key].includes(product[key])) {
-                  filtedProducts.push(product);
+                  if (filtedProducts.indexOf(product) < 0) {
+                    filtedProducts.push(product);
+                  }
                 }
               }
             }
           }
         });
-      } else {
-        filtedProducts = vm.allProducts;
+
+        // filtedProducts = vm.allProducts.filter(product =>
+        //   Object.keys(vm.checkedFilters).every(filterKey => vm.checkedFilters[filterKey].some(filterValue => filterValue == product[filterKey]))
+        // );
       }
 
       return filtedProducts;
@@ -79,9 +96,13 @@ export default {
           console.log(error.statusText);
         }
       );
-
-      console.log(vm.$store.state);
     }
+  },
+
+  watch: {
+    // filtedProducts: function(val) {
+    //   this.currentProducts = val;
+    // }
   },
 
   mounted: function() {
@@ -93,16 +114,20 @@ export default {
 <style lang="scss" scoped>
 @import "../../scss/base";
 
+.main-wrapper {
+  @media (min-width: $tablet) {
+    display: flex;
+  }
+}
 
 .products-wrapper {
   display: flex;
   flex-flow: row wrap;
-  justify-content: flex-start;  
-  margin: 0 auto;  
+  justify-content: flex-start;
 }
 
 .product {
   padding: 1em 0.5em;
-  flex: 1 1 200px;
+  flex: 0 1 200px;
 }
 </style>
