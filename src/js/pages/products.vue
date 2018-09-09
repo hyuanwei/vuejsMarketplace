@@ -1,5 +1,6 @@
 <template lang='pug'>
   div
+    //- div {{checkedFilters}}
     .main-wrapper
       .filters-wrapper
         filters(
@@ -26,56 +27,38 @@ const LINK = "products.json";
 export default {
   data: () => ({
     allProducts: [],
-    // currentProducts: [],
     allFilters: ["brand", "promotions"]
   }),
 
   computed: {
     checkedFilters() {
-      return this.$store.state.checkedFilters;
-    },
+      let allFilters = this.$store.state.checkedFilters;
+      let checkedFilters = {};
 
-    filterCount() {
-      let filterCount = 0;
-      for (var key in this.checkedFilters) {
-        filterCount += this.checkedFilters[key].length;
-      }
-      return filterCount;
+      Object.keys(allFilters).forEach(key => {
+        if (allFilters[key].length > 0) {
+          checkedFilters[key] = allFilters[key];
+        }
+      });
+
+      return checkedFilters;
     },
 
     filtedProducts() {
       let vm = this;
 
-      let filtedProducts = vm.allProducts;
+      let filtedProducts = this.allProducts;
 
-      if (vm.filterCount > 0) {
-        filtedProducts = [];
-
-        this.allProducts.forEach(product => {
-          for (var key in vm.checkedFilters) {
-            if (vm.checkedFilters.hasOwnProperty(key)) {
-              if (Array.isArray(vm.checkedFilters[key])) {
-                vm.checkedFilters[key].forEach(function(value) {
-                  if (product[key].includes(value)) {
-                    if (filtedProducts.indexOf(product) < 0) {
-                      filtedProducts.push(product);
-                    }
-                  }
-                });
-              } else {
-                if (vm.checkedFilters[key].includes(product[key])) {
-                  if (filtedProducts.indexOf(product) < 0) {
-                    filtedProducts.push(product);
-                  }
-                }
-              }
-            }
-          }
-        });
-
-        // filtedProducts = vm.allProducts.filter(product =>
-        //   Object.keys(vm.checkedFilters).every(filterKey => vm.checkedFilters[filterKey].some(filterValue => filterValue == product[filterKey]))
-        // );
+      if (Object.keys(this.checkedFilters).length > 0) {
+        filtedProducts = vm.allProducts.filter(product =>
+          Object.keys(vm.checkedFilters).every(filterKey =>
+            vm.checkedFilters[filterKey].some(
+              filterValue =>
+                filterValue === product[filterKey] ||
+                product[filterKey].includes(filterValue)
+            )
+          )
+        );
       }
 
       return filtedProducts;
