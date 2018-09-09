@@ -8,7 +8,7 @@
           v-bind:key="filter" 
           :filterKey = "filter"
         ) 
-      .products-wrapper
+      .products-wrapper 
         product(
           v-for="(product, index) in filtedProducts" 
           v-bind:key="product.sku" 
@@ -67,25 +67,16 @@ export default {
 
   methods: {
     getProducts: function() {
-      let vm = this;
-
-      this.$http.get(LINK).then(
-        function(response) {
-          vm.allProducts = response.data;
-          //console.log(vm.allProducts);
-          vm.$store.commit("setProductData", vm.allProducts);
-        },
-        function(error) {
-          console.log(error.statusText);
-        }
-      );
+      this.axios
+        .get(LINK)
+        .then(response => {
+          this.allProducts = response.data;
+          this.$store.commit("setProductData", this.allProducts);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
-  },
-
-  watch: {
-    // filtedProducts: function(val) {
-    //   this.currentProducts = val;
-    // }
   },
 
   mounted: function() {
